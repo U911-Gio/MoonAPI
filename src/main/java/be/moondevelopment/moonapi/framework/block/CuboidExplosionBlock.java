@@ -1,4 +1,4 @@
-package be.moondevelopment.moonapi.framework.utils;
+package be.moondevelopment.moonapi.framework.block;
 /*
  * @author MoonDevelopment
  * @website https://www.moondevelopment.be/
@@ -65,49 +65,29 @@ package be.moondevelopment.moonapi.framework.utils;
  * modification follow.
  */
 
-import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class ColorUtil {
+public class CuboidExplosionBlock implements ExplosionBlockProvider {
 
-    public static String CC(String s) {
-        return ChatColor.translateAlternateColorCodes('&', s);
-    }
 
-    public static List<String> CC(List<String> list) {
-        List<String> returnVal = new ArrayList<>(list.size());
-        list.forEach(s -> returnVal.add(CC(s)));
-        return returnVal;
-    }
-
-    public static String[] CC(String[] lines) {
-        List<String> res = new ArrayList<>();
-        if(lines == null) return null;
-        for(String line : lines) {
-            res.add(CC(line));
+    public static List<Block> provide(Block center, int radius) {
+        List<Block> blocks = new ArrayList<>();
+        final Location startLocation = center.getLocation();
+        final World world = center.getWorld();
+        for (int x = startLocation.getBlockX() - (radius == 4 ? 0 : (radius / 2)); x <= startLocation.getBlockX() + (radius == 4 ? radius - 1 : (radius / 2)); x++) {
+            for (int z = startLocation.getBlockZ() - (radius == 4 ? 0 : (radius / 2)); z <= startLocation.getBlockZ() + (radius == 4 ? radius - 1 : (radius / 2)); z++) {
+                for (int y = startLocation.getBlockY() - (radius == 4 ? 3 : (radius / 2)); y <= startLocation.getBlockY() + (radius == 4 ? 0 : (radius / 2)); y++) {
+                    Block block = world.getBlockAt(x, y, z);
+                    blocks.add(block);
+                }
+            }
         }
-        return res.toArray(new String[res.size()]);
+        return blocks;
     }
-
-    public static List<ChatColor> COLORS = new ArrayList<>(Arrays.asList(
-            ChatColor.WHITE, ChatColor.GOLD, ChatColor.LIGHT_PURPLE,
-            ChatColor.AQUA, ChatColor.YELLOW, ChatColor.GREEN,
-            ChatColor.DARK_GRAY, ChatColor.GRAY, ChatColor.DARK_AQUA,
-            ChatColor.DARK_PURPLE, ChatColor.BLUE, ChatColor.BLACK,
-            ChatColor.DARK_GREEN, ChatColor.RED));
-
-    public static int convertChatColorToWoolData(ChatColor color) {
-        return color == ChatColor.DARK_RED || color == ChatColor.RED ? 14
-                : color == ChatColor.DARK_GREEN ? 13
-                : color == ChatColor.BLUE ? 11
-                : color == ChatColor.DARK_PURPLE ? 10
-                : color == ChatColor.DARK_AQUA ? 9
-                : color == ChatColor.DARK_GRAY ? 7
-                : COLORS.indexOf(color);
-    }
-
 
 }

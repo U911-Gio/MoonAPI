@@ -11,6 +11,7 @@
 <h1 align="center">MoonAPI</h1>
 <p align="center">A Framework plugin with different features to use in your plugin!</p>
 
+
 <br />
 <p align="center"><b>⚠️ You need to install MoonAPI.java from releases or shade it into your plugin in order for your plugin to work!</b></p>
 <br />
@@ -70,7 +71,6 @@
 ```groovy
 allprojects {
     repositories {
-        ...
         maven { url 'https://jitpack.io' }
     }
 }
