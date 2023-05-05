@@ -51,7 +51,7 @@
 
 <h1 align="center">Maven</h1>
 
-<p align="center"><b>⚠️ You need to access token in order to use this dependency!</b></p>
+<p align="center"><b>⚠️ You need the access token in order to use this dependency!</b></p>
 <br />
 
 ```xml
@@ -72,7 +72,7 @@
 <br/>
 
 <h1 align="center">Gradle</h1>
-<p align="center"><b>⚠️ You need to access token in order to use this dependency!</b></p>
+<p align="center"><b>⚠️ You need the access token in order to use this dependency!</b></p>
 <br />
 
 ```groovy
@@ -83,7 +83,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'be.moondevelopment:MoonAPI:v1.'
+    implementation 'be.moondevelopment:MoonAPI:v1.1'
 }
 ```
 
