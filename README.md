@@ -22,14 +22,15 @@
 
 <h1 align="center">Features</h1>
 
-| Feature    | Implemented        |
-|------------|--------------------|
-| Database   | :white_check_mark: |
-| GUI        | :white_check_mark: |
-| ItemBuilder| :white_check_mark: |
-| Modules    | :white_check_mark: |
-| Scoreboard | :white_check_mark: |
-| Title      | :white_check_mark: |
+| Feature        | Implemented        |
+|----------------|--------------------|
+| Database       | :white_check_mark: |
+| GUI            | :white_check_mark: |
+| ItemBuilder    | :white_check_mark: |
+| Modules        | :white_check_mark: |
+| Scoreboard     | :white_check_mark: |
+| Title          | :white_check_mark: |
+| BlockExplosion | :white_check_mark: |
 
 <br />
 
@@ -44,10 +45,14 @@
 | MathUtil     | :white_check_mark: |
 | TimeUtil     | :white_check_mark: |
 | VersionUtil  | :white_check_mark: |
+| LoggerUtil   | :white_check_mark: |
 
 <br />
 
 <h1 align="center">Maven</h1>
+
+<p align="center"><b>⚠️ You need to access token in order to use this dependency!</b></p>
+<br />
 
 ```xml
 <repositories>
@@ -60,13 +65,15 @@
 <dependency>
     <groupId>be.moondevelopment</groupId>
     <artifactId>MoonAPI</artifactId>
-    <version>v1.0</version>
+    <version>v1.1</version>
 </dependency>
 ```
 
 <br/>
 
 <h1 align="center">Gradle</h1>
+<p align="center"><b>⚠️ You need to access token in order to use this dependency!</b></p>
+<br />
 
 ```groovy
 allprojects {
@@ -76,7 +83,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'be.moondevelopment:MoonAPI:v1.0'
+    implementation 'be.moondevelopment:MoonAPI:v1.'
 }
 ```
 
