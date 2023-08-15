@@ -6,7 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="MoonAPI" />
+        <module name="MoonAPI-BUNGEE" />
+        <module name="MoonAPI-SPIGOT" />
+      </profile>
+      <profile name="Annotation profile for MoonAPI" enabled="true">
+        <sourceOutputDir name="../target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="MoonAPI-DIST" />
       </profile>
     </annotationProcessing>
   </component>
