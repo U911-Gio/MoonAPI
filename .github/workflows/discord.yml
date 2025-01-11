@@ -10,7 +10,7 @@ jobs:
       - name: Discord Commits
         uses: Sniddl/discord-commits@v1.6
         with:
-          webhook: "https://discord.com/api/webhooks/997116798531027014/-FSzYX89yz39Ote_6iqy3ldOlgC_-llVFWuzrSkp53GsFuCeTIgeVJSQEYi_t28Q7CVq"
+          webhook: "*REDACTED*"
           message: "Successful push to **{{ github.context.payload.repository.name}}**. @everyone"
           embed: '{ "title": "{{ commit.title }}", "description": "{{ commit.description }}", "url": "{{ commit.url }}", "author": { "name": "{{ commit.author.name }} ({{ commit.author.username }})", "icon_url": "https://avatars.io/gravatar/{{ commit.author.email }}"} }'
           last-commit-only: false
