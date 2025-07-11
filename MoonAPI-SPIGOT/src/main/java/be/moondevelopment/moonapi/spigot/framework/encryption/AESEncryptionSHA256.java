@@ -1,4 +1,5 @@
-package be.moondevelopment.moonapi.spigot.framework.command;
+package be.moondevelopment.moonapi.spigot.framework.encryption;
+
 /*
  * @author MoonDevelopment
  * @website https://www.moondevelopment.be/
@@ -65,48 +66,71 @@ package be.moondevelopment.moonapi.spigot.framework.command;
  * modification follow.
  */
 
-import java.lang.reflect.Field;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandMap;
-import org.bukkit.plugin.Plugin;
 
-public class CommandManager {
-    private static Plugin plugin;
-    private static CommandMap commandMap;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
-    /**
-     * Initializes the CommandManager with the given plugin.
-     *
-     * @param spigot The plugin instance to register commands with.
-     * @throws IllegalStateException if the CommandManager has not been initialized yet.
-     */
-    public CommandManager(Plugin spigot) {
-        plugin = spigot;
-        if (plugin != null && plugin.isEnabled()) {
-            try {
-                Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-                field.setAccessible(true);
-                commandMap = (CommandMap)field.get(Bukkit.getServer());
-            } catch (IllegalAccessException | NoSuchFieldException var3) {
-                var3.printStackTrace();
-            }
+public class AESEncryptionSHA256 {
+    private static SecretKeySpec secretKey;
+    private static final String ALGORITHM = "AES";
 
-        } else {
-            throw new IllegalStateException("CommandManager has not been initialized yet");
+    public AESEncryptionSHA256(String key) {
+        try {
+            byte[] bytes = key.getBytes();
+            MessageDigest sha = MessageDigest.getInstance("SHA-256");
+            bytes = sha.digest(bytes);
+            bytes = Arrays.copyOf(bytes, 16);
+            secretKey = new SecretKeySpec(bytes, "AES");
+        } catch (NoSuchAlgorithmException var4) {
+            throw new RuntimeException(var4);
         }
     }
 
-    /**
-     * Registers a command with the plugin's command map.
-     *
-     * @param command The command to register.
-     * @throws IllegalStateException if the CommandManager has not been initialized yet.
-     */
-    public void register(AbstractCommand command) {
-        if (plugin == null) {
-            throw new IllegalStateException("CommandManager has not been initialized yet");
-        } else {
-            commandMap.register(plugin.getName(), command);
+    public String encrypt(String s) {
+        try {
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(1, secretKey);
+            return "SHA-256-" + Base64.getEncoder().encodeToString(cipher.doFinal(s.getBytes("UTF-8")));
+        } catch (Exception var3) {
+            System.out.println("Error while encrypting: " + var3.toString());
+            return null;
+        }
+    }
+
+    public byte[] encrypt(byte[] s) {
+        try {
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(1, secretKey);
+            return cipher.doFinal(s);
+        } catch (Exception var3) {
+            System.out.println("Error while encrypting: " + var3.toString());
+            return null;
+        }
+    }
+
+    public String decrypt(String s) {
+        try {
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(2, secretKey);
+            return new String(cipher.doFinal(Base64.getDecoder().decode(s.replace("SHA-256-", ""))));
+        } catch (Exception var3) {
+            System.out.println("Error while decrypting: " + var3.toString());
+            return null;
+        }
+    }
+
+    public byte[] decrypt(byte[] s) {
+        try {
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(2, secretKey);
+            return cipher.doFinal(s);
+        } catch (Exception var3) {
+            System.out.println("Error while decrypting: " + var3.toString());
+            return null;
         }
     }
 }

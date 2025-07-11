@@ -1,4 +1,5 @@
 package be.moondevelopment.moonapi.spigot.framework.command;
+
 /*
  * @author MoonDevelopment
  * @website https://www.moondevelopment.be/
@@ -65,48 +66,104 @@ package be.moondevelopment.moonapi.spigot.framework.command;
  * modification follow.
  */
 
-import java.lang.reflect.Field;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandMap;
-import org.bukkit.plugin.Plugin;
 
-public class CommandManager {
-    private static Plugin plugin;
-    private static CommandMap commandMap;
+import java.util.Arrays;
+import java.util.List;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.defaults.BukkitCommand;
+
+public abstract class AbstractCommand extends BukkitCommand {
 
     /**
-     * Initializes the CommandManager with the given plugin.
+     * Constructs a new command
      *
-     * @param spigot The plugin instance to register commands with.
-     * @throws IllegalStateException if the CommandManager has not been initialized yet.
+     * @param command The name of the command.
      */
-    public CommandManager(Plugin spigot) {
-        plugin = spigot;
-        if (plugin != null && plugin.isEnabled()) {
-            try {
-                Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-                field.setAccessible(true);
-                commandMap = (CommandMap)field.get(Bukkit.getServer());
-            } catch (IllegalAccessException | NoSuchFieldException var3) {
-                var3.printStackTrace();
-            }
-
-        } else {
-            throw new IllegalStateException("CommandManager has not been initialized yet");
-        }
+    public AbstractCommand(String command) {
+        super(command);
     }
 
     /**
-     * Registers a command with the plugin's command map.
+     * Constructs a new command
      *
-     * @param command The command to register.
-     * @throws IllegalStateException if the CommandManager has not been initialized yet.
+     * @param command The name of the command.
+     * @param description The description of the command.
      */
-    public void register(AbstractCommand command) {
-        if (plugin == null) {
-            throw new IllegalStateException("CommandManager has not been initialized yet");
-        } else {
-            commandMap.register(plugin.getName(), command);
-        }
+    public AbstractCommand(String command, String description) {
+        super(command);
+        this.setDescription(description);
     }
+
+    public AbstractCommand(String command, String description, String permission) {
+        super(command);
+        this.setDescription(description);
+        this.setPermission(permission);
+    }
+
+    /**
+     * Constructs a new command
+     *
+     * @param command The name of the command.
+     * @param aliases The aliases of the command.
+     */
+    public AbstractCommand(String command, String[] aliases) {
+        super(command);
+        this.setAliases(Arrays.asList(aliases));
+    }
+
+    /**
+     * Constructs a new command
+     *
+     * @param command The name of the command.
+     * @param aliases The aliases of the command.
+     * @param description The description of the command.
+     */
+    public AbstractCommand(String command, String[] aliases, String description) {
+        super(command);
+        this.setAliases(Arrays.asList(aliases));
+        this.setDescription(description);
+    }
+
+    /**
+     * Constructs a new command
+     *
+     * @param command The name of the command.
+     * @param aliases The aliases of the command.
+     * @param description The description of the command.
+     * @param permission The permission required to execute the command.
+     */
+    public AbstractCommand(String command, String[] aliases, String description, String permission) {
+        super(command);
+        this.setAliases(Arrays.asList(aliases));
+        this.setDescription(description);
+        this.setPermission(permission);
+    }
+
+    /**
+     * Executes the command.
+     *
+     * @param sender The sender of the command.
+     * @param s The command label.
+     * @param args The arguments of the command.
+     * @return false
+     */
+    public boolean execute(CommandSender sender, String s, String[] args) {
+        this.onCommand(sender, s, args);
+        return false;
+    }
+
+    /**
+     * Called when the command is executed.
+     *
+     * @param sender The sender of the command.
+     * @param s The command label.
+     * @param args The arguments of the command.
+     */
+    public abstract void onCommand(CommandSender sender, String s, String[] args);
+
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+        return this.onTabComplete(sender, args);
+    }
+
+    public abstract List<String> onTabComplete(CommandSender sender, String[] args);
 }

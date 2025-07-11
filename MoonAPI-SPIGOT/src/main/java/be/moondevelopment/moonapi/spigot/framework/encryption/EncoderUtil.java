@@ -1,4 +1,5 @@
-package be.moondevelopment.moonapi.spigot.framework.command;
+package be.moondevelopment.moonapi.spigot.framework.encryption;
+
 /*
  * @author MoonDevelopment
  * @website https://www.moondevelopment.be/
@@ -65,48 +66,96 @@ package be.moondevelopment.moonapi.spigot.framework.command;
  * modification follow.
  */
 
-import java.lang.reflect.Field;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandMap;
-import org.bukkit.plugin.Plugin;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
-public class CommandManager {
-    private static Plugin plugin;
-    private static CommandMap commandMap;
-
-    /**
-     * Initializes the CommandManager with the given plugin.
-     *
-     * @param spigot The plugin instance to register commands with.
-     * @throws IllegalStateException if the CommandManager has not been initialized yet.
-     */
-    public CommandManager(Plugin spigot) {
-        plugin = spigot;
-        if (plugin != null && plugin.isEnabled()) {
-            try {
-                Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-                field.setAccessible(true);
-                commandMap = (CommandMap)field.get(Bukkit.getServer());
-            } catch (IllegalAccessException | NoSuchFieldException var3) {
-                var3.printStackTrace();
+public class EncoderUtil {
+    public static String encode(String s, int times) {
+        if (times == 0) {
+            (new Exception("Parameter 'times+-' cannot be 0!")).printStackTrace();
+            return null;
+        } else if (times > 65) {
+            (new Exception("Parameter 'times' cannot be higher than 65!")).printStackTrace();
+            return null;
+        } else {
+            boolean encrypted = false;
+            if (s.startsWith("SHA-256-")) {
+                s = s.replace("SHA-256-", "");
+                encrypted = true;
             }
 
-        } else {
-            throw new IllegalStateException("CommandManager has not been initialized yet");
+            s = next(s);
+
+            for(int i = 0; i < times; ++i) {
+                s = rot13(s);
+                s = new String(Base64.getEncoder().encode(s.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+                s = next(s);
+            }
+
+            return (encrypted ? "SHA-256-" : "") + s;
         }
     }
 
-    /**
-     * Registers a command with the plugin's command map.
-     *
-     * @param command The command to register.
-     * @throws IllegalStateException if the CommandManager has not been initialized yet.
-     */
-    public void register(AbstractCommand command) {
-        if (plugin == null) {
-            throw new IllegalStateException("CommandManager has not been initialized yet");
+    public static String decode(String s, int times) {
+        if (times == 0) {
+            (new Exception("Parameter 'times' cannot be 0!")).printStackTrace();
+            return null;
+        } else if (times > 65) {
+            (new Exception("Parameter 'times' cannot be higher than 65!")).printStackTrace();
+            return null;
         } else {
-            commandMap.register(plugin.getName(), command);
+            boolean encrypted = false;
+            if (s.startsWith("SHA-256-")) {
+                s = s.replace("SHA-256-", "");
+                encrypted = true;
+            }
+
+            for(int i = 0; i < times; ++i) {
+                s = next(s);
+                s = new String(Base64.getDecoder().decode(s.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+                s = rot13(s);
+            }
+
+            s = next(s);
+            return (encrypted ? "SHA-256-" : "") + s;
         }
+    }
+
+    public static String rot13(String s) {
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+            if (c >= 'a' && c <= 'm') {
+                c = (char)(c + 13);
+            } else if (c >= 'A' && c <= 'M') {
+                c = (char)(c + 13);
+            } else if (c >= 'n' && c <= 'z') {
+                c = (char)(c - 13);
+            } else if (c >= 'N' && c <= 'Z') {
+                c = (char)(c - 13);
+            }
+
+            sb.append(c);
+        }
+
+        return sb.toString();
+    }
+
+    private static String next(String s) {
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+            if (c % 2 == 1) {
+                c = (char)(c + 3);
+            } else if (c % 2 == 0) {
+                c = (char)(c - 3);
+            }
+
+            sb.append(c);
+        }
+
+        return sb.toString();
     }
 }

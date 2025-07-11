@@ -1,4 +1,5 @@
-package be.moondevelopment.moonapi.spigot.framework.command;
+package be.moondevelopment.moonapi.spigot.framework.kit;
+
 /*
  * @author MoonDevelopment
  * @website https://www.moondevelopment.be/
@@ -65,48 +66,55 @@ package be.moondevelopment.moonapi.spigot.framework.command;
  * modification follow.
  */
 
-import java.lang.reflect.Field;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandMap;
-import org.bukkit.plugin.Plugin;
 
-public class CommandManager {
-    private static Plugin plugin;
-    private static CommandMap commandMap;
+import be.moondevelopment.moonapi.spigot.framework.utils.DatabaseUtil;
+import lombok.Getter;
+import lombok.Setter;
+import org.bukkit.inventory.ItemStack;
 
-    /**
-     * Initializes the CommandManager with the given plugin.
-     *
-     * @param spigot The plugin instance to register commands with.
-     * @throws IllegalStateException if the CommandManager has not been initialized yet.
-     */
-    public CommandManager(Plugin spigot) {
-        plugin = spigot;
-        if (plugin != null && plugin.isEnabled()) {
-            try {
-                Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-                field.setAccessible(true);
-                commandMap = (CommandMap)field.get(Bukkit.getServer());
-            } catch (IllegalAccessException | NoSuchFieldException var3) {
-                var3.printStackTrace();
-            }
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
 
-        } else {
-            throw new IllegalStateException("CommandManager has not been initialized yet");
-        }
+public class Kits {
+    @Getter @Setter private String name;
+    @Getter @Setter private String permission;
+    @Getter @Setter private ItemStack[] items;
+    @Getter @Setter private int cooldown;
+    @Getter @Setter private int amount;
+
+    public Kits(String name, String permission, ItemStack[] items, int cooldown) {
+        this.name = name;
+        this.permission = permission;
+        this.items = items;
+        this.cooldown = cooldown;
+        this.amount = (int) Arrays.stream(items).filter(Objects::nonNull).count();
     }
 
     /**
-     * Registers a command with the plugin's command map.
+     * Set the Object to a String
      *
-     * @param command The command to register.
-     * @throws IllegalStateException if the CommandManager has not been initialized yet.
+     * @since 2.0
+     * @return String
      */
-    public void register(AbstractCommand command) {
-        if (plugin == null) {
-            throw new IllegalStateException("CommandManager has not been initialized yet");
-        } else {
-            commandMap.register(plugin.getName(), command);
-        }
+    public String toString() {
+        return "Kits-MAPI(name=" + this.name + ", permission=" + this.permission + ", items=[" + DatabaseUtil.toBase64ItemStackArray(this.items) + "], cooldown=" + this.cooldown + ")";
     }
+
+    /**
+     * Get the Object from a String
+     *
+     * @param string Object as a String
+     * @return Kits Object
+     */
+    public static Kits fromString(String string) throws IOException {
+        String newString = string.replace("Kits-MAPI(name=", "").replace("permission=", "").replace("items=", "").replace("cooldown=", "").replace(")", "");
+        String[] split = newString.split(", ");
+        String name = split[0];
+        String permission = split[1];
+        ItemStack[] items = DatabaseUtil.fromBase64ItemStackArray(split[2].replace("[", "").replace("]", ""));
+        int cooldown = Integer.parseInt(split[3]);
+        return new Kits(name, permission, items, cooldown);
+    }
+
 }

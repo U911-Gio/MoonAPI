@@ -193,7 +193,7 @@ public class Cooldown {
      * @return String
      */
     public String toString() {
-        return "Cooldown(uuid=" + this.getUuid() + ", type=" + this.getType() + ", time=" + this.getTime() + ")";
+        return "Cooldown-MAPI(uuid=" + this.getUuid() + ", type=" + this.getType() + ", time=" + this.getTime() + ")";
     }
 
     /**
@@ -203,7 +203,7 @@ public class Cooldown {
      * @return Cooldown Object
      */
     public static Cooldown fromString(String string) {
-        String newString = string.replace("Cooldown(uuid=", "").replace("type=", "").replace("time=", "").replace(")", "");
+        String newString = string.replace("Cooldown-MAPI(uuid=", "").replace("type=", "").replace("time=", "").replace(")", "");
         String[] split = newString.split(", ");
         return new Cooldown(UUID.fromString(split[0]), split[1], Long.parseLong(split[2]));
     }

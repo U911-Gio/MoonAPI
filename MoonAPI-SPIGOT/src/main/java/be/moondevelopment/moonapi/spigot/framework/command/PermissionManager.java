@@ -78,20 +78,14 @@ public class PermissionManager {
     private static Plugin plugin;
 
     /**
-     * Initialize the PermissionManager
-     *
-     * @param spigot The plugin instance
-     */
-    public static void init(Plugin spigot) {
-        plugin = spigot;
-    }
-
-    /**
      * Constructor
      *
+     * @param spigot The plugin instance
      * @throws IllegalStateException If the PermissionManager has not been initialized yet
      */
-    public PermissionManager() {
+    public PermissionManager(Plugin spigot) {
+        plugin = spigot;
+
         if (plugin == null) {
             throw new IllegalStateException("PermissionManager has not been initialized yet");
         }
