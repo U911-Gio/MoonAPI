@@ -20,39 +20,72 @@
 
 <br />
 
-<h1 align="center">Features</h1>
+<h1 align="center">Spigot</h1>
+<h2 align="center">Features</h2>
 
-| Feature        | Implemented        |
-|----------------|--------------------|
-| Database       | :white_check_mark: |
-| GUI            | :white_check_mark: |
-| ItemBuilder    | :white_check_mark: |
-| Modules        | :white_check_mark: |
-| Scoreboard     | :white_check_mark: |
-| Title          | :white_check_mark: |
-| BlockExplosion | :white_check_mark: |
+| Feature           | Implemented        |
+|-------------------|--------------------|
+| BlockExplosion    | :white_check_mark: |
+| CommandManager    | :white_check_mark: |
+| PermissionManager | :white_check_mark: |
+| Cooldown          | :white_check_mark: |
+| Database          | :white_check_mark: |
+| Encryption        | :white_check_mark: |
+| GUI               | :white_check_mark: |
+| ItemBuilder       | :white_check_mark: |
+| Kits              | :white_check_mark: |
+| Modules           | :white_check_mark: |
+| Scoreboard        | :white_check_mark: |
+| Title             | :white_check_mark: |
+
 
 <br />
 
-<h1 align="center">Utils</h1>
+<h2 align="center">Utils</h2>
 
-| Utils        | Implemented        |
-|--------------|--------------------|
-| ChatUtil     | :white_check_mark: |
-| ColorUtil    | :white_check_mark: |
-| ConfigUtil   | :white_check_mark: |
-| DatabaseUtil | :white_check_mark: |
-| MathUtil     | :white_check_mark: |
-| TimeUtil     | :white_check_mark: |
-| VersionUtil  | :white_check_mark: |
-| LoggerUtil   | :white_check_mark: |
+| Utils          | Implemented        |
+|----------------|--------------------|
+| ChatUtil       | :white_check_mark: |
+| ColorUtil      | :white_check_mark: |
+| ConfigUtil     | :white_check_mark: |
+| DatabaseUtil   | :white_check_mark: |
+| EncoderUtil    | :white_check_mark: |
+| LoggerUtil     | :white_check_mark: |
+| MathUtil       | :white_check_mark: |
+| TimeUtil       | :white_check_mark: |
+| VersionUtil    | :white_check_mark: |
+| YamlConfigUtil | :white_check_mark: |
+
+
+<br />
+
+<h1 align="center">Bungeecord</h1>
+<h2 align="center">Features</h2>
+
+| Feature           | Implemented        |
+|-------------------|--------------------|
+| Cooldown          | :white_check_mark: |
+| Database          | :white_check_mark: |
+| Modules           | :white_check_mark: |
+
+<br />
+
+<h2 align="center">Utils</h2>
+
+| Utils          | Implemented        |
+|----------------|--------------------|
+| ChatUtil       | :white_check_mark: |
+| ColorUtil      | :white_check_mark: |
+| DatabaseUtil   | :white_check_mark: |
+| EncoderUtil    | :white_check_mark: |
+| LoggerUtil     | :white_check_mark: |
+| MathUtil       | :white_check_mark: |
+| TimeUtil       | :white_check_mark: |
+
 
 <br />
 
 <h1 align="center">Maven</h1>
-
-<p align="center"><b>⚠️ You need the access token in order to use this dependency!</b></p>
-<br />
 
 ```xml
 <repositories>
@@ -62,28 +95,42 @@
     </repository>
 </repositories>
 
+<!-- Bungee -->
 <dependency>
-    <groupId>be.moondevelopment</groupId>
-    <artifactId>MoonAPI</artifactId>
-    <version>v1.1</version>
+    <groupId>be.moondevelopment.MoonAPI</groupId>
+    <artifactId>MoonAPI-BUNGEE</artifactId>
+    <version>v2.0</version>
+</dependency>
+
+<!-- Spigot -->
+<dependency>
+    <groupId>be.moondevelopment.MoonAPI</groupId>
+    <artifactId>MoonAPI-SPIGOT</artifactId>
+    <version>v2.0</version>
 </dependency>
 ```
 
 <br/>
 
 <h1 align="center">Gradle</h1>
-<p align="center"><b>⚠️ You need the access token in order to use this dependency!</b></p>
-<br />
 
 ```groovy
-allprojects {
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        mavenCentral()
         maven { url 'https://jitpack.io' }
     }
 }
 
+// Bungee
 dependencies {
-    implementation 'be.moondevelopment:MoonAPI:v1.1'
+    implementation 'be.moondevelopment.MoonAPI:MoonAPI-BUNGEE:v2.0'
+}
+
+// Spigot
+dependencies {
+    implementation 'be.moondevelopment.MoonAPI:MoonAPI-SPIGOT:v2.0'
 }
 ```
 
