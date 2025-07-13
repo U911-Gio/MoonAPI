@@ -27,8 +27,8 @@
     <modules>
         <module>MoonAPI-SPIGOT</module>
         <module>MoonAPI-BUNGEE</module>
-        <module>MoonAPI-DIST</module>
         <module>MoonAPI-VELOCITY</module>
+        <module>MoonAPI-DIST</module>
     </modules>
 
     <properties>
