@@ -59,7 +59,7 @@
 
 <br />
 
-<h1 align="center">Bungeecord</h1>
+<h1 align="center">Bungeecord & Velocity</h1>
 <h2 align="center">Features</h2>
 
 | Feature           | Implemented        |
@@ -102,6 +102,13 @@
     <version>v2.0</version>
 </dependency>
 
+<!-- Velocity -->
+<dependency>
+    <groupId>be.moondevelopment.MoonAPI</groupId>
+    <artifactId>MoonAPI-VELOCITY</artifactId>
+    <version>v2.0</version>
+</dependency>
+
 <!-- Spigot -->
 <dependency>
     <groupId>be.moondevelopment.MoonAPI</groupId>
@@ -126,6 +133,11 @@ dependencyResolutionManagement {
 // Bungee
 dependencies {
     implementation 'be.moondevelopment.MoonAPI:MoonAPI-BUNGEE:v2.0'
+}
+
+// Velocity
+dependencies {
+    implementation 'be.moondevelopment.MoonAPI:MoonAPI-VELOCITY:v2.0'
 }
 
 // Spigot
