@@ -20,8 +20,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -44,8 +44,8 @@
     </build>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
@@ -60,6 +60,12 @@
         <dependency>
             <groupId>be.moondevelopment</groupId>
             <artifactId>MoonAPI-BUNGEE</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>be.moondevelopment</groupId>
+            <artifactId>MoonAPI-VELOCITY</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
