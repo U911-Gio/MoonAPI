@@ -74,7 +74,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
 
 public class MySQL extends Database {
 
@@ -135,7 +135,7 @@ public class MySQL extends Database {
             final Timer timer = new Timer();
             timer.schedule(timerTask, 60000, 60000);
         } catch (SQLException x) {
-            logger.severe(ColorUtil.CC("&4Error whilst connecting to the database: \n&c" + x.getMessage()).toString());
+            logger.error(ColorUtil.CC("&4Error whilst connecting to the database: \n&c" + x.getMessage()).toString());
         }
     }
 

@@ -73,7 +73,7 @@ public class LoggerUtil {
     public static void start_begin(PluginDescription description, String name) {
         MoonAPI.getInstance().getServer().sendMessage(ColorUtil.CC("&7===&8=============================================&7==="));
         MoonAPI.getInstance().getServer().sendMessage(ColorUtil.CC("&8- &bName: &3" + name));
-        MoonAPI.getInstance().getServer().sendMessage(ColorUtil.CC("&8- &bVersion: &3" + description.getVersion()));
+        MoonAPI.getInstance().getServer().sendMessage(ColorUtil.CC("&8- &bVersion: &3" + (description.getVersion().isPresent() ? description.getVersion().get() : "Unknown")));
         MoonAPI.getInstance().getServer().sendMessage(ColorUtil.CC("&8- &bAuthors: &3" + description.getAuthors().stream()
                 .map(author -> author.toString())
                 .reduce((a, b) -> a + ", " + b)

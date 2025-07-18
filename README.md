@@ -66,6 +66,7 @@
 |-------------------|--------------------|
 | Cooldown          | :white_check_mark: |
 | Database          | :white_check_mark: |
+| Encryption        | :white_check_mark: |
 | Modules           | :white_check_mark: |
 
 <br />
@@ -99,21 +100,21 @@
 <dependency>
     <groupId>be.moondevelopment.MoonAPI</groupId>
     <artifactId>MoonAPI-BUNGEE</artifactId>
-    <version>v2.0</version>
+    <version>v2.1</version>
 </dependency>
 
 <!-- Velocity -->
 <dependency>
     <groupId>be.moondevelopment.MoonAPI</groupId>
     <artifactId>MoonAPI-VELOCITY</artifactId>
-    <version>v2.0</version>
+    <version>v2.1</version>
 </dependency>
 
 <!-- Spigot -->
 <dependency>
     <groupId>be.moondevelopment.MoonAPI</groupId>
     <artifactId>MoonAPI-SPIGOT</artifactId>
-    <version>v2.0</version>
+    <version>v2.1</version>
 </dependency>
 ```
 
@@ -132,17 +133,17 @@ dependencyResolutionManagement {
 
 // Bungee
 dependencies {
-    implementation 'be.moondevelopment.MoonAPI:MoonAPI-BUNGEE:v2.0'
+    implementation 'be.moondevelopment.MoonAPI:MoonAPI-BUNGEE:v2.1'
 }
 
 // Velocity
 dependencies {
-    implementation 'be.moondevelopment.MoonAPI:MoonAPI-VELOCITY:v2.0'
+    implementation 'be.moondevelopment.MoonAPI:MoonAPI-VELOCITY:v2.1'
 }
 
 // Spigot
 dependencies {
-    implementation 'be.moondevelopment.MoonAPI:MoonAPI-SPIGOT:v2.0'
+    implementation 'be.moondevelopment.MoonAPI:MoonAPI-SPIGOT:v2.1'
 }
 ```
 

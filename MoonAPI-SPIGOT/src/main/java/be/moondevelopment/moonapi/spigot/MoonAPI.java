@@ -76,7 +76,7 @@ import org.bukkit.plugin.java.annotation.plugin.author.Authors;
 
 @Plugin(
         name = "MoonAPI",
-        version = "2.0-SNAPSHOT"
+        version = "2.1-SNAPSHOT"
 )
 @Description(
         "An all in one framework plugin with different utils | Created by MoonDevelopment."

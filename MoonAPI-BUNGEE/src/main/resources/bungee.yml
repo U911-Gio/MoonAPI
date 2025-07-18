@@ -1,5 +1,5 @@
 name: MoonAPI
 main: be.moondevelopment.moonapi.bungee.MoonAPI
-version: 2.0-SNAPSHOT
+version: 2.1-SNAPSHOT
 author: MoonDevelopment
 description: An all in one framework plugin with different utils | Created by MoonDevelopment.

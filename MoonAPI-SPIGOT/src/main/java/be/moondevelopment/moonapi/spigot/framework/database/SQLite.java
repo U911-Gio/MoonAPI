@@ -102,6 +102,7 @@ public class SQLite extends Database {
         File dataFile = new File(plugin.getDataFolder(), file);
         if (!dataFile.exists()) {
             try {
+                if (!dataFile.getParentFile().exists()) dataFile.getParentFile().mkdirs();
                 dataFile.createNewFile();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -113,7 +114,11 @@ public class SQLite extends Database {
                     "jdbc:sqlite:"
                             + plugin.getDataFolder().getAbsolutePath() + File.separator + file);
         } catch (SQLException | ClassNotFoundException x) {
-            Bukkit.getConsoleSender().sendMessage(ColorUtil.CC("&4Error whilst connecting to the database: \n&c" + x.getMessage()));
+            if (x.getMessage().contains("org.sqlite.JDBC")) {
+                Bukkit.getConsoleSender().sendMessage(ColorUtil.CC("&4SQLite driver not found! Please add the SQLite driver to your plugins folder."));
+            } else {
+                x.printStackTrace();
+            }
         }
 
         final TimerTask timerTask =

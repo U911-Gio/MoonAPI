@@ -75,7 +75,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
 
 public class SQLite extends Database {
 
@@ -105,6 +105,7 @@ public class SQLite extends Database {
         File dataFile = new File(dataDir, file);
         if (!dataFile.exists()) {
             try {
+                if (!dataFile.getParentFile().exists()) dataFile.getParentFile().mkdirs();
                 dataFile.createNewFile();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -116,7 +117,7 @@ public class SQLite extends Database {
                     "jdbc:sqlite:"
                             + dataDir.getAbsolutePath() + File.separator + file);
         } catch (SQLException | ClassNotFoundException x) {
-            logger.severe(ColorUtil.CC("&4Error whilst connecting to the database: \n&c" + x.getMessage()).toString());
+            logger.error(ColorUtil.CC("&4Error whilst connecting to the database: \n&c" + x.getMessage()).toString());
         }
 
         final TimerTask timerTask =
@@ -156,7 +157,7 @@ public class SQLite extends Database {
                             + dataDir.getAbsolutePath() + File.separator + file);
         } catch (SQLException | ClassNotFoundException x) {
             x.printStackTrace();
-            logger.severe(ColorUtil.CC("&4Error whilst connecting to the database: \n&c" + x.getMessage()).toString());
+            logger.error(ColorUtil.CC("&4Error whilst connecting to the database: \n&c" + x.getMessage()).toString());
         }
         return null;
     }

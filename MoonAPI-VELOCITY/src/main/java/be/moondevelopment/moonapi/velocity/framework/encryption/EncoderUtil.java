@@ -1,4 +1,5 @@
-package be.moondevelopment.moonapi.bungee.framework.database;
+package be.moondevelopment.moonapi.velocity.framework.encryption;
+
 /*
  * @author MoonDevelopment
  * @website https://www.moondevelopment.be/
@@ -65,96 +66,96 @@ package be.moondevelopment.moonapi.bungee.framework.database;
  * modification follow.
  */
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
-import be.moondevelopment.moonapi.bungee.framework.utils.ColorUtil;
-import net.md_5.bungee.api.plugin.Plugin;
-
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Timer;
-import java.util.TimerTask;
-
-public class SQLite extends Database {
-
-    private String file;
-    private Plugin plugin;
-
-    /**
-     * SQLite Constructor
-     *
-     * @param plugin Main plugin
-     * @param file File of the database (SQLite)
-     */
-    public SQLite(Plugin plugin, String file) {
-        super(plugin, file);
-        this.plugin = plugin;
-        this.file = file;
-    }
-
-    /**
-     * Connect to a SQLite database
-     */
-    @Override
-    public void connect() {
-        File dataFile = new File(plugin.getDataFolder(), file);
-        if (!dataFile.exists()) {
-            try {
-                if (!dataFile.getParentFile().exists()) dataFile.getParentFile().mkdirs();
-                dataFile.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+public class EncoderUtil {
+    public static String encode(String s, int times) {
+        if (times == 0) {
+            (new Exception("Parameter 'times+-' cannot be 0!")).printStackTrace();
+            return null;
+        } else if (times > 65) {
+            (new Exception("Parameter 'times' cannot be higher than 65!")).printStackTrace();
+            return null;
+        } else {
+            boolean encrypted = false;
+            if (s.startsWith("SHA-256-")) {
+                s = s.replace("SHA-256-", "");
+                encrypted = true;
             }
+
+            s = next(s);
+
+            for(int i = 0; i < times; ++i) {
+                s = rot13(s);
+                s = new String(Base64.getEncoder().encode(s.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+                s = next(s);
+            }
+
+            return (encrypted ? "SHA-256-" : "") + s;
         }
-        try {
-            Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection(
-                    "jdbc:sqlite:"
-                            + plugin.getDataFolder().getAbsolutePath() + File.separator + file);
-        } catch (SQLException | ClassNotFoundException x) {
-            plugin.getProxy().getConsole().sendMessage(ColorUtil.CC("&4Error whilst connecting to the database: \n&c" + x.getMessage()));
-        }
-
-        final TimerTask timerTask =
-                new TimerTask() {
-                    @Override
-                    public void run() {
-                        try {
-
-                            if (connection != null && !connection.isClosed()) {
-                                connection.createStatement().execute("SELECT 1");
-                            } else {
-                                connection = getNewConnection();
-                            }
-
-                        } catch (SQLException ex) {
-                            connection = getNewConnection();
-                        }
-                    }
-                };
-
-        final Timer timer = new Timer();
-        timer.schedule(timerTask, 60000, 60000);
     }
 
-    /**
-     * Get a new SQLite connection
-     *
-     * @return Connection
-     */
-    @Override
-    public Connection getNewConnection() {
-        try {
-            disconnect();
-            Class.forName("org.sqlite.JDBC");
-            return DriverManager.getConnection(
-                    "jdbc:sqlite:"
-                            + plugin.getDataFolder().getAbsolutePath() + File.separator + file);
-        } catch (SQLException | ClassNotFoundException x) {
-            x.printStackTrace();
+    public static String decode(String s, int times) {
+        if (times == 0) {
+            (new Exception("Parameter 'times' cannot be 0!")).printStackTrace();
+            return null;
+        } else if (times > 65) {
+            (new Exception("Parameter 'times' cannot be higher than 65!")).printStackTrace();
+            return null;
+        } else {
+            boolean encrypted = false;
+            if (s.startsWith("SHA-256-")) {
+                s = s.replace("SHA-256-", "");
+                encrypted = true;
+            }
+
+            for(int i = 0; i < times; ++i) {
+                s = next(s);
+                s = new String(Base64.getDecoder().decode(s.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+                s = rot13(s);
+            }
+
+            s = next(s);
+            return (encrypted ? "SHA-256-" : "") + s;
         }
-        return null;
+    }
+
+    public static String rot13(String s) {
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+            if (c >= 'a' && c <= 'm') {
+                c = (char)(c + 13);
+            } else if (c >= 'A' && c <= 'M') {
+                c = (char)(c + 13);
+            } else if (c >= 'n' && c <= 'z') {
+                c = (char)(c - 13);
+            } else if (c >= 'N' && c <= 'Z') {
+                c = (char)(c - 13);
+            }
+
+            sb.append(c);
+        }
+
+        return sb.toString();
+    }
+
+    private static String next(String s) {
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+            if (c % 2 == 1) {
+                c = (char)(c + 3);
+            } else if (c % 2 == 0) {
+                c = (char)(c - 3);
+            }
+
+            sb.append(c);
+        }
+
+        return sb.toString();
     }
 }

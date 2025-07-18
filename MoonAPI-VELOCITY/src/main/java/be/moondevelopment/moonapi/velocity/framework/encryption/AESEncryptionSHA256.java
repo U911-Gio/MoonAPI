@@ -1,4 +1,5 @@
-package be.moondevelopment.moonapi.bungee.framework.database;
+package be.moondevelopment.moonapi.velocity.framework.encryption;
+
 /*
  * @author MoonDevelopment
  * @website https://www.moondevelopment.be/
@@ -66,95 +67,70 @@ package be.moondevelopment.moonapi.bungee.framework.database;
  */
 
 
-import be.moondevelopment.moonapi.bungee.framework.utils.ColorUtil;
-import net.md_5.bungee.api.plugin.Plugin;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Base64;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Timer;
-import java.util.TimerTask;
+public class AESEncryptionSHA256 {
+    private static SecretKeySpec secretKey;
+    private static final String ALGORITHM = "AES";
 
-public class SQLite extends Database {
-
-    private String file;
-    private Plugin plugin;
-
-    /**
-     * SQLite Constructor
-     *
-     * @param plugin Main plugin
-     * @param file File of the database (SQLite)
-     */
-    public SQLite(Plugin plugin, String file) {
-        super(plugin, file);
-        this.plugin = plugin;
-        this.file = file;
+    public AESEncryptionSHA256(String key) {
+        try {
+            byte[] bytes = key.getBytes();
+            MessageDigest sha = MessageDigest.getInstance("SHA-256");
+            bytes = sha.digest(bytes);
+            bytes = Arrays.copyOf(bytes, 16);
+            secretKey = new SecretKeySpec(bytes, "AES");
+        } catch (NoSuchAlgorithmException var4) {
+            throw new RuntimeException(var4);
+        }
     }
 
-    /**
-     * Connect to a SQLite database
-     */
-    @Override
-    public void connect() {
-        File dataFile = new File(plugin.getDataFolder(), file);
-        if (!dataFile.exists()) {
-            try {
-                if (!dataFile.getParentFile().exists()) dataFile.getParentFile().mkdirs();
-                dataFile.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    public String encrypt(String s) {
         try {
-            Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection(
-                    "jdbc:sqlite:"
-                            + plugin.getDataFolder().getAbsolutePath() + File.separator + file);
-        } catch (SQLException | ClassNotFoundException x) {
-            plugin.getProxy().getConsole().sendMessage(ColorUtil.CC("&4Error whilst connecting to the database: \n&c" + x.getMessage()));
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(1, secretKey);
+            return "SHA-256-" + Base64.getEncoder().encodeToString(cipher.doFinal(s.getBytes("UTF-8")));
+        } catch (Exception var3) {
+            System.out.println("Error while encrypting: " + var3.toString());
+            return null;
         }
-
-        final TimerTask timerTask =
-                new TimerTask() {
-                    @Override
-                    public void run() {
-                        try {
-
-                            if (connection != null && !connection.isClosed()) {
-                                connection.createStatement().execute("SELECT 1");
-                            } else {
-                                connection = getNewConnection();
-                            }
-
-                        } catch (SQLException ex) {
-                            connection = getNewConnection();
-                        }
-                    }
-                };
-
-        final Timer timer = new Timer();
-        timer.schedule(timerTask, 60000, 60000);
     }
 
-    /**
-     * Get a new SQLite connection
-     *
-     * @return Connection
-     */
-    @Override
-    public Connection getNewConnection() {
+    public byte[] encrypt(byte[] s) {
         try {
-            disconnect();
-            Class.forName("org.sqlite.JDBC");
-            return DriverManager.getConnection(
-                    "jdbc:sqlite:"
-                            + plugin.getDataFolder().getAbsolutePath() + File.separator + file);
-        } catch (SQLException | ClassNotFoundException x) {
-            x.printStackTrace();
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(1, secretKey);
+            return cipher.doFinal(s);
+        } catch (Exception var3) {
+            System.out.println("Error while encrypting: " + var3.toString());
+            return null;
         }
-        return null;
+    }
+
+    public String decrypt(String s) {
+        try {
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(2, secretKey);
+            return new String(cipher.doFinal(Base64.getDecoder().decode(s.replace("SHA-256-", ""))));
+        } catch (Exception var3) {
+            System.out.println("Error while decrypting: " + var3.toString());
+            return null;
+        }
+    }
+
+    public byte[] decrypt(byte[] s) {
+        try {
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(2, secretKey);
+            return cipher.doFinal(s);
+        } catch (Exception var3) {
+            System.out.println("Error while decrypting: " + var3.toString());
+            return null;
+        }
     }
 }

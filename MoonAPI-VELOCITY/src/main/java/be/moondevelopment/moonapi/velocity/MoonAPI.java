@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 @Plugin(
     id = "moonapi",
     name = "MoonAPI",
-    version = "2.0-SNAPSHOT",
+    version = "2.1-SNAPSHOT",
     authors = {"MoonDevelopment"},
     description = "An all in one framework plugin with different utils | Created by MoonDevelopment."
 )
