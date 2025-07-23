@@ -76,7 +76,7 @@ public class ColorUtil {
 
 
     public static @NotNull Component CC(String s) {
-        return LegacyComponentSerializer.legacy('&').deserialize(s);
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(s);
     }
 
     public static List<Component> CC(List<String> list) {

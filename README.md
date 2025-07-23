@@ -98,23 +98,25 @@
 
 <!-- Bungee -->
 <dependency>
-    <groupId>be.moondevelopment.MoonAPI</groupId>
+    <groupId>com.github.U911-Gio.MoonAPI</groupId>
     <artifactId>MoonAPI-BUNGEE</artifactId>
-    <version>v2.1</version>
+    <version>v2.1.1</version>
 </dependency>
 
 <!-- Velocity -->
 <dependency>
-    <groupId>be.moondevelopment.MoonAPI</groupId>
+    <groupId>com.github.U911-Gio.MoonAPI</groupId>
     <artifactId>MoonAPI-VELOCITY</artifactId>
-    <version>v2.1</version>
+    <version>v2.1.1</version>
 </dependency>
+
+
 
 <!-- Spigot -->
 <dependency>
-    <groupId>be.moondevelopment.MoonAPI</groupId>
+    <groupId>com.github.U911-Gio.MoonAPI</groupId>
     <artifactId>MoonAPI-SPIGOT</artifactId>
-    <version>v2.1</version>
+    <version>v2.1.1</version>
 </dependency>
 ```
 
@@ -133,17 +135,17 @@ dependencyResolutionManagement {
 
 // Bungee
 dependencies {
-    implementation 'be.moondevelopment.MoonAPI:MoonAPI-BUNGEE:v2.1'
+    implementation 'com.github.U911-Gio.MoonAPI:MoonAPI-BUNGEE:v2.1.1'
 }
 
 // Velocity
 dependencies {
-    implementation 'be.moondevelopment.MoonAPI:MoonAPI-VELOCITY:v2.1'
+    implementation 'com.github.U911-Gio.MoonAPI:MoonAPI-VELOCITY:v2.1.1'
 }
 
 // Spigot
 dependencies {
-    implementation 'be.moondevelopment.MoonAPI:MoonAPI-SPIGOT:v2.1'
+    implementation 'com.github.U911-Gio.MoonAPI:MoonAPI-SPIGOT:v2.1.1'
 }
 ```
 
